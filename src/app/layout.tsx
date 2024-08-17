@@ -1,6 +1,8 @@
+import LeftSidebar from "@/components/layout/LeftSidebar";
 import MobileHeader from "@/components/layout/MobileHeader";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Toolbar from '../components/layout/Toolbar';
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +24,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="mx-auto flex min-h-screen flex-col bg-white lg:max-w-5xl">
           <MobileHeader/>
+          <div className="flex flex-1 md:h-screen">
+            <LeftSidebar />
+            <main
+            className="mt-14 w-full overflow-y-auto border-r border-gray-200 p-16 md:mt-0  md:w-1/2 md:pb-0 xl:w-3/5"
+            >
         {children}
+        </main>
+        </div>
+        <Toolbar />
+
         </div>
         
         </body>
