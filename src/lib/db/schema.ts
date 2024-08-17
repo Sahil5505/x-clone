@@ -2,7 +2,7 @@ import { relations } from "drizzle-orm";
 import { foreignKey, index, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 
-export const profiles = pgTable("prfiles", {
+export const profiles = pgTable("profiles", {
     id: uuid("id").primaryKey().notNull(),
     username:text("username").notNull().unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),   
