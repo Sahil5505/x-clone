@@ -2,6 +2,7 @@ import LeftSidebar from "@/components/layout/LeftSidebar";
 import MobileHeader from "@/components/layout/MobileHeader";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import RightSideBar from '../components/layout/RightSidebar';
 import Toolbar from '../components/layout/Toolbar';
 import "./globals.css";
 
@@ -27,10 +28,10 @@ export default function RootLayout({
           <div className="flex flex-1 md:h-screen">
             <LeftSidebar />
             <main
-            className="mt-14 w-full overflow-y-auto border-r border-gray-200 p-16 md:mt-0  md:w-1/2 md:pb-0 xl:w-3/5"
-            >
+            className="mt-14 w-full overflow-y-auto border-r border-gray-200 p-16 md:mt-0  md:w-1/2 md:pb-0 xl:w-3/5">
         {children}
         </main>
+        <RightSideBar />
         </div>
         <Toolbar />
 

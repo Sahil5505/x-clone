@@ -17,11 +17,12 @@ export default function Nav() {
     ];
 
     function isActive(link:string) {
-        return link == '/' ? pathname ==  link : pathname.startsWith(link);
+        return link === '/' ? pathname ===  link : pathname.startsWith(link);
     }
      
     
-    return <nav className='flex justify-around py-2 md:flex-col md:gap-2 md:py-0'>
+    return(
+    <nav className='flex justify-around py-2 md:flex-col md:gap-2 md:py-0'>
         {links.map((item) =>  (
             <Link href={item.link} key={item.text} className={`flex w-max flex-col items-center gap-2 rounded-3xl text-xs md:flex-row md:py-3 md:pl-4 md:pr-8 md:text-xl md:hover:bg-gray-100 ${isActive(item.link) ? "font-bold" : "font-medium"}` }>
                 <item.icon
@@ -35,4 +36,5 @@ export default function Nav() {
         ))}
 
     </nav>
+    )
 }

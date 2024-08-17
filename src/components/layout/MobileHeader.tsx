@@ -11,9 +11,9 @@ export default function MobileHeader() {
         </div>
       </div>
       <Link href="/">
-   <p className="h-8 w-8 text-gray-800 " >
+   <h1 className="h-8 w-8 text-gray-800 " >
    𝕏
-    </p>   
+    </h1>   
       </Link> 
       
     </header>
