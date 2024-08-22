@@ -1,6 +1,8 @@
-import { createBrowserClient } from "@supabase/ssr";
 import { User } from "@supabase/supabase-js";
-import React, { createContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
+import createBrowserClient from "../../../../supabase/clients/browser";
 
 
 
@@ -17,6 +19,7 @@ const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 
 
 export default function AuthProvider({children} : {children: React.ReactNode}) {
+    const router = useRouter()
     const  supabase = createBrowserClient()
     const [user,setUser] = useState<User | null >(null)
     const [loading, setLoading] = useState(true);
@@ -33,8 +36,91 @@ export default function AuthProvider({children} : {children: React.ReactNode}) {
             }
             setLoading(false);
 
-        })
+        });
+        return () => {
+            data?.subscription.unsubscribe();
+        }
 
-    },[])
+    },[]);
 
+async function handleSignOut() {
+    setLoading(true)
+    const {error} = await supabase.auth.signOut()
+    if (error) {
+        toast.error(error.message)
+    }else {
+router.refresh();
+    }
+setLoading(false);
+}
+async function handleLogin(email:string, password: string) {
+    setLoading(true);
+    const {error} = await supabase.auth.signInWithPassword({email, password,});
+    if (error) {
+        toast.error(error.message)
+    }else {
+router.refresh();
+    }
+setLoading(false);
+}
+
+async function handleSignUp(email:string,username:string, password: string) {
+    setLoading(true);
+    const {error} = await supabase.auth.signUp({email, password,options:{ data: {username}}});
+    if (error) {
+        if(error.message === "Database error saving new user") {
+            toast.error("username is already taken");
+        }else {
+            toast.error(error.message)
+
+        }
+    }else {
+router.refresh();
+    }
+setLoading(false);
+}
+
+async function updateUser(username:string) {
+    setLoading(true);  
+    const {error} = await supabase.auth.updateUser({ data: {username}});
+    if (error) {
+        setLoading(false);
+        if(error.message === "Database error saving new user") {
+            toast.error("username is already taken");
+        }else {
+            toast.error(error.message)
+
+        }
+        return{ success : false};
+    }else {
+router.refresh();
+return {success: true }; 
+    }
+
+    
+}
+
+
+
+
+
+    return <AuthContext.Provider
+    value={{
+        user,
+        loading,
+        handleSignOut,
+        handleLogin,
+        handleSignUp,
+        updateUser
+    }}
+    >{children}</AuthContext.Provider>
+
+}
+
+export function useAuth(){ 
+    const context = useContext(AuthContext)
+    if(!context){
+        throw new Error("useAuth must be used within an AuthProvider")
+    }
+    return context;
 }
