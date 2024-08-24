@@ -64,22 +64,30 @@ router.refresh();
 setLoading(false);
 }
 
-async function handleSignUp(email:string,username:string, password: string) {
+async function handleSignUp(email: string, username: string, password: string) {
     setLoading(true);
-    const {error} = await supabase.auth.signUp({email, password,options:{ data: {username}}});
-    if (error) {
-        if(error.message === "Database error saving new user") {
-            toast.error("username is already taken");
-        }else {
-            toast.error(error.message)
-
+    const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                username
+            }
         }
-    }else {
-router.refresh();
+    });
+    if (error) {
+        if (error.message === "Database error saving new user") {
+            toast.error("Username is already taken");
+        } else {
+            toast.error(error.message);
+        }
+    } else {
+        router.refresh();
     }
-setLoading(false);
+    setLoading(false);
 }
 
+  
 async function updateUser(username:string) {
     setLoading(true);  
     const {error} = await supabase.auth.updateUser({ data: {username}});
@@ -99,9 +107,6 @@ return {success: true };
 
     
 }
-
-
-
 
 
     return <AuthContext.Provider
